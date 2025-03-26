@@ -93,3 +93,46 @@ eventController.get(`/${url}/:id([0-9]+)`, async (req, res) => {
     errorResponse(res, `Error fetching event: ${err.message}`);
   }
 });
+
+eventController.get(`/${url}/category/:name`, async (req, res) => {
+  try {
+    const { name } = req.params;
+    const category = await Category.findOne({ where: { name: name } });
+
+    const result = await model.findAll({
+      where: { category_id: category.id },
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name"],
+        },
+        {
+          model: User,
+          as: "creator",
+          attributes: ["firstname", "lastname"],
+        },
+      ],
+      attributes: {
+        exclude: [
+          "createdAt",
+          "updatedAt",
+          "creator_id",
+          "user_id",
+          "category_id",
+        ],
+      },
+    });
+
+    if (!result || result.length === 0) {
+      errorResponse(
+        res,
+        `No events found in the ${category.name} category`,
+        404
+      );
+    }
+    successResponse(res, result);
+  } catch (err) {
+    errorResponse(res, `Error fetching event from category: ${err.message}`);
+  }
+});

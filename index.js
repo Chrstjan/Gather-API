@@ -6,6 +6,7 @@ import { setRelations } from "./models/relations.js";
 import { categoryController } from "./controllers/category.controller.js";
 import { userController } from "./controllers/user.controller.js";
 import { eventController } from "./controllers/event.controller.js";
+import { commentController } from "./controllers/comment.controller.js";
 
 const app = express();
 
@@ -26,7 +27,8 @@ app.use(
   authController,
   userController,
   categoryController,
-  eventController
+  eventController,
+  commentController
 );
 
 app.listen(port, () => {

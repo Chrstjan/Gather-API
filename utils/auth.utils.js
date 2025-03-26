@@ -42,7 +42,7 @@ const Authenticate = async (req, res) => {
   try {
     const user = await User.findOne({
       attributes: ["id", "firstname", "lastname", "password"],
-      where: { email: username, is_active: 1 },
+      where: { email: username },
     });
 
     if (!user) return res.status(401);
@@ -64,7 +64,7 @@ const Authenticate = async (req, res) => {
       user: { id: user.id, firstname: user.firstname, lastname: user.lastname },
     });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
@@ -90,7 +90,7 @@ const Authorize = async (req, res, next) => {
     if (err.message === "jwt expired") {
       // If access token is expired, attempt to refresh it
       const user = await User.findOne({
-        where: { id: jwt.decode(token).data.id, is_active: 1 },
+        where: { id: jwt.decode(token).data.id },
       });
       if (!user.access_token) return res.status(400);
 
@@ -115,15 +115,17 @@ const Authorize = async (req, res, next) => {
  */
 const getUserFromToken = async (req, res) => {
   const bearerHeader = req.headers["authorization"];
-  if (!bearerHeader || !bearerHeader.startsWith("bearer "))
-    return res.status(401);
 
-  try {
+  if (bearerHeader && bearerHeader.includes("Bearer ")) {
     const token = bearerHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.TOKEN_ACCESS_KEY);
-    return res.json({ userId: decoded.data.id });
-  } catch (err) {
-    return res.status(401).json({ message: "Invalid token" });
+    try {
+      const decodeToken = jwt.verify(token, process.env.TOKEN_ACCESS_KEY);
+      const user_id = await decodeToken.data.id;
+      console.log(user_id);
+      return user_id;
+    } catch (err) {
+      console.error(err);
+    }
   }
 };
 
