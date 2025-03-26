@@ -1,0 +1,2 @@
+id,user_id,date,location,subject,description,category_id,time,num_joined
+1,1,"2025-04-24","Aalborg","Event Test","Dummy Event",1,"17:00:00",0

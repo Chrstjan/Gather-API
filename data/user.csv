@@ -1,0 +1,2 @@
+id,firstname,lastname,username,email,password,refresh_token,image,description,num_followers
+1,"Test","User","TestUser","none@fake.com","password","-","","",0

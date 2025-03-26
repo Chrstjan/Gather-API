@@ -13,7 +13,7 @@ Event.init(
       allowNull: false,
       primaryKey: true,
     },
-    creator_id: {
+    user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

@@ -1,4 +1,5 @@
 import { Category } from "./category.model.js";
+import { Comment } from "./comment.model.js";
 import { Event } from "./event.model.js";
 import { User } from "./user.model.js";
 
@@ -15,7 +16,7 @@ export const setRelations = () => {
 
   // User / Event relation
   Event.belongsTo(User, {
-    foreignKey: "creator_id",
+    foreignKey: "user_id",
     as: "creator",
     onDelete: "CASCADE",
   });
@@ -25,3 +26,27 @@ export const setRelations = () => {
     onDelete: "CASCADE",
   });
 };
+
+// Comment / User relation
+Comment.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user",
+  onDelete: "CASCADE",
+});
+User.hasMany(Comment, {
+  foreignKey: "user_id",
+  as: "comments",
+  onDelete: "CASCADE",
+});
+
+// Comment / Event relation
+Comment.belongsTo(Event, {
+  foreignKey: "event_id",
+  as: "event",
+  onDelete: "CASCADE",
+});
+Event.hasMany(Comment, {
+  foreignKey: "event_id",
+  as: "comments",
+  onDelete: "CASCADE",
+});

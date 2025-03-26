@@ -32,7 +32,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    refesh_token: {
+    refresh_token: {
       type: DataTypes.STRING,
       allowNull: false,
     },
